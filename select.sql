@@ -45,16 +45,67 @@ Escreva uma consulta que retorne os identificadores de contas com maior saldo de
 juntamente com os nomes dos titulares (nome da empresa ou nome e sobrenome da pessoa física) e os
 nomes dessas agências.
 */
+select * from account;
+select * from branch;
+
+select bc.name Agencia, max(avail_balance) Maior_saldo, b.name Titular
+from branch bc
+inner join account a on bc.branch_id = a.open_branch_id
+inner join business b on a.cust_id = b.cust_id
+group by a.open_branch_id
+union
+select bc.name agencia, max(avail_balance) Maior_Saldo, concat(fname, ' ', lname) Titular
+from branch bc
+inner join account a on bc.branch_id = a.open_branch_id
+inner join individual i on a.cust_id = i.cust_id
+group by a.open_branch_id
+having Maior_Saldo > Maior_saldo;
+
+
+
+
+
+
+
+
+
+
+
+
+
+select bc.name agencia, max(avail_balance) Maior_Saldo, b.name Titular
+from branch bc
+inner join account a on bc.branch_id = a.open_branch_id
+inner join business b on a.cust_id = b.cust_id
+group by a.open_branch_id;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 select distinct bc.name Agencia, concat(fname, ' ', lname) nome, a.account_id ID, MAX(avail_balance) Maior_Saldo
 from branch bc
 inner join account a on a.open_branch_id = bc.branch_id
 inner join individual i on i.cust_id = a.cust_id
-group by bc.branch_id
+group by a.open_branch_id
 having Maior_Saldo = max(avail_balance)
 union
 select distinct bc.name, b.name, a.account_id, max(avail_balance) Maior_Saldo
 from branch bc
 inner join account a on a.open_branch_id = bc.branch_id
 inner join business b on b.cust_id = a.cust_id
-group by bc.branch_id;
+group by a.open_branch_id;
