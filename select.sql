@@ -1,4 +1,5 @@
-/* 1. Escreva uma consulta que retorne o nome e sobrenome de todos os administradores (officer) com o nome
+/* 1. Junções Internas
+Escreva uma consulta que retorne o nome e sobrenome de todos os administradores (officer) com o nome
 da empresa que eles administram (business.name) e cidade onde ela está presente (customer.city).
 */
 
@@ -8,7 +9,8 @@ inner join business b on (o.cust_id = b.cust_id)
 inner join customer c on (b.cust_id = c.cust_id)
 where c.city is not null;
 
-/* 2. Escreva uma consulta que retorne os nome dos clientes (nome das pessoas jurídicas ou nome + sobrenome
+/* 2. Junções Internas, União e Seleção
+Escreva uma consulta que retorne os nome dos clientes (nome das pessoas jurídicas ou nome + sobrenome
 das pessoas físicas) que possuem uma conta em uma cidade diferente da cidade de estabelecimento.*/
 
 select CONCAT(fname, ' ', lname)nome 
@@ -25,9 +27,11 @@ inner join account a on a.cust_id = b.cust_id
 inner join branch bc on a.open_branch_id = bc.branch_id
 where not bc.city = c.city;
 
-/* 3. Escreva uma consulta que retorne os nome de todos os funcionários(employee) com, se for o caso, os números de
-transações por ano envolvendo as contas que eles abriram (usando open_emp_id, account). Ordene os resultados
-por ordem alfabética, e depois por ano (do mais antigo para o mais recente).*/
+/* 3. Junção Externa, Agrupamento, Agregação e Ordenação
+Escreva uma consulta que retorne os nome de todos os funcionários com, se for o caso, os números de
+transações por ano envolvendo as contas que eles abriram (usando open_emp_id). Ordene os resultados
+por ordem alfabética, e depois por ano (do mais antigo para o mais recente).
+*/
 
 select  concat(fname, ' ',lname) nome, count(t.account_id) n_transacoes,  year(txn_date) as ano
 from  employee e
@@ -36,6 +40,21 @@ left join transaction t on t.account_id = a.account_id
 group by nome, ano
 order by nome, txn_date asc;
 
-/* 4. Escreva uma consulta que retorne os identificadores de contas com maior saldo de dinheiro por agência,
+/* 4. Junções Internas, Agrupamento, Agregação, União e Concatenação
+Escreva uma consulta que retorne os identificadores de contas com maior saldo de dinheiro por agência,
 juntamente com os nomes dos titulares (nome da empresa ou nome e sobrenome da pessoa física) e os
-nomes dessas agências.*/
+nomes dessas agências.
+*/
+
+select distinct bc.name Agencia, concat(fname, ' ', lname) nome, a.account_id ID, MAX(avail_balance) Maior_Saldo
+from branch bc
+inner join account a on a.open_branch_id = bc.branch_id
+inner join individual i on i.cust_id = a.cust_id
+group by bc.branch_id
+having Maior_Saldo = max(avail_balance)
+union
+select distinct bc.name, b.name, a.account_id, max(avail_balance) Maior_Saldo
+from branch bc
+inner join account a on a.open_branch_id = bc.branch_id
+inner join business b on b.cust_id = a.cust_id
+group by bc.branch_id;
