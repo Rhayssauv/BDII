@@ -1,4 +1,7 @@
 /* begin table creation */
+create schema banco;
+use banco;
+
 
 create table department
  (dept_id smallint unsigned not null auto_increment,
