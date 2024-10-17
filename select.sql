@@ -66,33 +66,37 @@ group by Agencia;
 /*5. Visualização
 Escreva de novo e modularize as consultas 2. e 4. utilizando uma visualização (CREATE VIEW).
 */
-
-create view ClienteCidadeDiferente as
-select CONCAT(fname, ' ', lname)nome 
+-- 2 --
+create view pessoa_fisica_juridica as 
+select concat (fname, ' ', lname) Nome, i.cust_id ID, c.city City
 from individual i
-inner join account a on a.cust_id = i.cust_id
 inner join customer c on c.cust_id = i.cust_id
-inner join branch bc on a.open_branch_id = bc.branch_id
-where not bc.city = c.city
-union
-select b.name 
+union 
+select b.name Nome, b.cust_id, c.city
 from business b
-inner join customer c on c.cust_id = b.cust_id
-inner join account a on a.cust_id = b.cust_id
-inner join branch bc on a.open_branch_id = bc.branch_id
-where not bc.city = c.city;
+inner join customer c on c.cust_id = b.cust_id;
 
-create view Maior_Saldo as
-select a.account_id ID, b.name Titular, max(avail_balance) Maior_Saldo, bc.name Agencia
-from account a
-inner join branch bc on bc.branch_id = a.open_branch_id
-inner join business b on b.cust_id = a.cust_id
-where a.avail_balance = (select max(avail_balance) from account a where a.open_branch_id = bc.branch_id)
-group by Agencia
+select distinct p.Nome
+from pessoa_fisica_juridica p
+inner join account a on p.ID = a.cust_id
+inner join branch b on a.open_branch_id = b.branch_id
+where not b.city = p.City;
+
+
+-- 4 --
+
+create view pessoa as
+select b.name titular, b.cust_id idtitular
+from business b
 union
-select a.account_id ID, concat(fname, ' ', lname), max(avail_balance) Maior_Saldo, bc.name Agencia
-from account a
+select concat(fname, ' ', lname), i.cust_id
+from individual i; 
+
+
+select a.account_id ID, p.titular Titular, max(avail_balance) Maior_Saldo, bc.name Agencia
+from pessoa p
+inner join account a on p.idtitular = a.cust_id
 inner join branch bc on bc.branch_id = a.open_branch_id
-inner join individual i on i.cust_id = a.cust_id
 where a.avail_balance = (select max(avail_balance) from account a where a.open_branch_id = bc.branch_id)
 group by Agencia;
+
