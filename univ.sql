@@ -22,7 +22,7 @@ alter table materia add constraint c_cargahoraria check (cargaHoraria >= 40);
 CREATE TABLE disciplina (
   cod_disc INT NOT NULL,
   cod_mat INT NOT NULL,
-  idprofessor SMALLINT(4) NOT NULL,
+  idprofessor SMALLINT(4) ZEROFILL NOT NULL,
   vaga TINYINT NOT NULL,
   semestre INT
 );
@@ -37,7 +37,7 @@ CREATE TABLE curso (
   cod_curso INT NOT NULL,
   nome VARCHAR(100) NOT NULL,
   cargaHoraria INT DEFAULT 3600,
-  idprofessor_coordenador SMALLINT(4) NOT NULL
+  idprofessor_coordenador SMALLINT(4) ZEROFILL NOT NULL
 );
 alter table curso add constraint pk_curso primary key (cod_curso);
 alter table curso add constraint fk_professor_curso foreign key (idprofessor_coordenador) references professor (idprofessor);
@@ -76,7 +76,7 @@ alter table matricula add constraint fk_curso_matricula foreign key (cod_curso) 
 
 CREATE TABLE IF NOT EXISTS disciplina_matricula (
   cod_disc INT NOT NULL,
-  idprofessor SMALLINT(4) NOT NULL,
+  idprofessor SMALLINT(4) ZEROFILL NOT NULL,
   cod_aluno INT NOT NULL
 );
 alter table disciplina_matricula add constraint pk_disciplina_matricula primary key (cod_disc, idprofessor, cod_aluno);
