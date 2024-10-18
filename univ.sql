@@ -8,6 +8,7 @@ CREATE TABLE professor(
   email VARCHAR(100)
   );
 alter table professor add constraint pk_professor primary key (idprofessor);
+alter table professor add unique (email);
 
 CREATE TABLE IF NOT EXISTS materia (
   cod_mat INT NOT NULL,
