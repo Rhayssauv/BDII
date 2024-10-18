@@ -83,4 +83,4 @@ CREATE TABLE IF NOT EXISTS disciplina_matricula (
 alter table disciplina_matricula add constraint pk_disciplina_matricula primary key (cod_disc, idprofessor, cod_aluno);
 alter table disciplina_matricula add constraint fk_aluno_disciplina_matricula foreign key (cod_aluno) references aluno (cod_aluno);
 alter table disciplina_matricula add constraint fk_disciplina_disciplina_matricula foreign key (cod_disc) references disciplina (cod_disc);
-alter table disciplina_matricula add constraint fk_disciplina_professor_matricula foreign key (idprofessor) references professor (idpRofessor);
+alter table disciplina_matricula add constraint fk_disciplina_professor_matricula foreign key (idprofessor) references professor (idprofessor);
