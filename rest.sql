@@ -32,5 +32,8 @@ create table item (
 alter table item add constraint pk_item primary key (cod_item);
 
 create table pedido (
-  cod_pedido int auto_increment not null
+  cod_pedido int auto_increment not null,
+  inicio datetime,
+  fim datetime,
+  duracao time_to_second(timediff(time(fim), (inicio)))
 );
