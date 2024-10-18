@@ -10,7 +10,7 @@ CREATE TABLE professor(
 alter table professor add constraint pk_professor primary key (idprofessor);
 alter table professor add unique (email);
 
-CREATE TABLE IF NOT EXISTS materia (
+CREATE TABLE materia (
   cod_mat INT NOT NULL,
   nome VARCHAR(100) NOT NULL,
   cargaHoraria INT NOT NULL,
@@ -44,14 +44,14 @@ alter table curso add constraint pk_curso primary key (cod_curso);
 alter table curso add constraint fk_professor_curso foreign key (idprofessor_coordenador) references professor (idprofessor);
 
 
-CREATE TABLE IF NOT EXISTS aluno (
+CREATE TABLE aluno (
   cod_aluno INT NOT NULL,
   nome VARCHAR(100) NOT NULL
 );
 alter table aluno add constraint pk_aluno primary key (cod_aluno);
 
 
-CREATE TABLE IF NOT EXISTS email (
+CREATE TABLE email (
   email VARCHAR(100) NOT NULL,
   cod_aluno INT NOT NULL
 );
@@ -59,7 +59,7 @@ alter table email add constraint pk_email primary key (email, cod_aluno);
 alter table email add constraint fk_aluno_email foreign key (cod_aluno) references aluno (cod_aluno);
 
 
-CREATE TABLE IF NOT EXISTS curso_materia (
+CREATE TABLE curso_materia (
   cod_curso INT NOT NULL,
   cod_mat INT NOT NULL
 );
@@ -67,7 +67,7 @@ alter table curso_materia add constraint pk_curso_materia primary key (cod_curso
 alter table curso_materia add constraint fk_curso_curso_materia foreign key (cod_curso) references curso (cod_curso);
 alter table curso_materia add constraint fk_materia_curso_materia foreign key (cod_mat) references materia (cod_mat);
 
-CREATE TABLE IF NOT EXISTS matricula (
+CREATE TABLE matricula (
   cod_curso INT NOT NULL,
   cod_aluno INT NOT NULL
 );
@@ -75,7 +75,7 @@ alter table matricula add constraint pk_matricula primary key (cod_curso, cod_al
 alter table matricula add constraint fk_aluno_matricula foreign key (cod_aluno) references aluno (cod_aluno);
 alter table matricula add constraint fk_curso_matricula foreign key (cod_curso) references curso (cod_curso);
 
-CREATE TABLE IF NOT EXISTS disciplina_matricula (
+CREATE TABLE disciplina_matricula (
   cod_disc INT NOT NULL,
   idprofessor SMALLINT(4) ZEROFILL NOT NULL,
   cod_aluno INT NOT NULL
