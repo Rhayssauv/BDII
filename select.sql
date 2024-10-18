@@ -3,7 +3,7 @@ Escreva uma consulta que retorne o nome e sobrenome de todos os administradores 
 da empresa que eles administram (business.name) e cidade onde ela está presente (customer.city).
 */
 
-select concat(fname, ' ', lname) Nome_Sobrenome, name, city
+select o.fname Nome, o.lname Sobrenome, b.name Empresa, c.city Cidade
 from officer o 
 inner join business b on (o.cust_id = b.cust_id)
 inner join customer c on (b.cust_id = c.cust_id)
@@ -13,7 +13,7 @@ where c.city is not null;
 Escreva uma consulta que retorne os nome dos clientes (nome das pessoas jurídicas ou nome + sobrenome
 das pessoas físicas) que possuem uma conta em uma cidade diferente da cidade de estabelecimento.*/
 
-select CONCAT(fname, ' ', lname)nome 
+select CONCAT(fname, ' ', lname) Nome 
 from individual i
 inner join account a on a.cust_id = i.cust_id
 inner join customer c on c.cust_id = i.cust_id
@@ -61,12 +61,10 @@ where a.avail_balance = (select max(avail_balance) from account a where a.open_b
 group by Agencia;
 
 
-
-
 /*5. Visualização
 Escreva de novo e modularize as consultas 2. e 4. utilizando uma visualização (CREATE VIEW).
 */
--- 2 --
+-- 2 
 create view pessoa_fisica_juridica as 
 select concat (fname, ' ', lname) Nome, i.cust_id ID, c.city City
 from individual i
@@ -83,8 +81,7 @@ inner join branch b on a.open_branch_id = b.branch_id
 where not b.city = p.City;
 
 
--- 4 --
-
+-- 4 
 create view pessoa as
 select b.name titular, b.cust_id idtitular
 from business b
@@ -99,4 +96,3 @@ inner join account a on p.idtitular = a.cust_id
 inner join branch bc on bc.branch_id = a.open_branch_id
 where a.avail_balance = (select max(avail_balance) from account a where a.open_branch_id = bc.branch_id)
 group by Agencia;
-
