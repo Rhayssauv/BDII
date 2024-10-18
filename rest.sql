@@ -36,11 +36,12 @@ create table pedido (
   idcliente int not null,
   matricula smallint(3) zerofill not null,
   num_mesa tinyint(2) zerofill not null,
-  inicio time,
-  fim time
+  inicio timestamp not null,
+  fim timestamp not null,
+  duracao int generated always as (timestampdiff(second, inicio, fim)) stored
   
 );
--- alter table pedido add constraint pk_pedido primary key (cod_pedido);
+
 alter table pedido add constraint fk_pedido_mesa foreign key (num_mesa) references mesa (num_mesa);
 alter table pedido add constraint fk_pedido_cliente foreign key (idcliente) references cliente (idcliente);
 alter table pedido add constraint fk_pedido_atendente foreign key (matricula) references atendente (matricula);
